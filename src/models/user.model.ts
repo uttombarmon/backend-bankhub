@@ -29,13 +29,12 @@ const userSchema = new Schema(
     timestamps: true,
   },
 );
-userSchema.pre("save", async function (next) {
-  if (!this?.isModified("password")) {
-    return next;
-  }
+userSchema.pre("save", async function () {
+  // if (!this?.isModified("password"))
+  //   return
+  // }
   const hash = await bcrypt.hash(this.password as string, 10);
   this.password = hash;
-  return next;
 });
 
 userSchema.methods.comparePassword = async function name(password: string) {
