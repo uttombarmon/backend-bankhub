@@ -1,4 +1,3 @@
-import { IUser } from "../types/User";
 import { userModel } from "../models/user.model";
 
 /**
@@ -7,8 +6,12 @@ import { userModel } from "../models/user.model";
  * @returns
  * User Find By Email
  */
-export async function findUserByEmail(email: string) {
+export async function findUserByEmail(email: string, password?: string) {
   try {
+    if (email && password) {
+      const user = await userModel.findOne({ email }).select("+password");
+      return user;
+    }
     const user = await userModel.findOne({ email });
     return user;
   } catch (error) {

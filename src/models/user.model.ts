@@ -1,11 +1,22 @@
 import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcryptjs";
+import { Types } from "mongoose";
 
-const userSchema = new Schema(
+export interface IUser extends Document {
+  _id: Types.ObjectId;
+  name: string;
+  email: string;
+  password?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  comparePassword(password: string): Promise<boolean>;
+}
+
+const userSchema = new Schema<IUser>(
   {
     name: {
       type: String,
-      reqired: [true, "Must be enter name!"],
+      required: [true, "Must be enter name!"],
     },
     email: {
       type: String,
@@ -20,7 +31,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      reqiured: [true, "Password is reqired!"],
+      required: [true, "Password is reqired!"],
       minLength: [8, "Password contain 8 or more characters!"],
       select: false,
     },
@@ -37,7 +48,10 @@ userSchema.pre("save", async function () {
   this.password = hash;
 });
 
-userSchema.methods.comparePassword = async function name(password: string) {
+userSchema.methods.comparePassword = async function (
+  password: string,
+): Promise<boolean> {
+  if (!this.password) return false;
   return await bcrypt.compare(password, this.password);
 };
 
