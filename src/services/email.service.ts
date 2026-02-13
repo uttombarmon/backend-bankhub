@@ -65,7 +65,7 @@ export async function SendRegisterationMail(params: {
             <h1>Welcome to the Community!</h1>
         </div>
         <div class="content">
-            <p>Hi <strong>{${params.name}}</strong>,</p>
+            <p>Hi <strong>${params.name}</strong>,</p>
             <p>We're excited to have you on board! Your account is officially set up and ready to go.</p>
             <p>To get started and explore your new dashboard, click the button below:</p>
             <div class="button-container">

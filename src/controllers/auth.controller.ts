@@ -50,11 +50,12 @@ export async function userLoginController(req: Request, res: Response) {
       throw new Error("Missing email or password!");
     }
 
-    const user = await findUserByEmail(email);
+    const user = await findUserByEmail(email, password);
     if (!user) {
       return res.status(401).json({ message: "User not registered!" });
     }
     const isMatch = await user.comparePassword(password);
+    console.log(isMatch);
     if (isMatch) {
       const token = jwt.sign(
         { id: user._id, email: user.email },
