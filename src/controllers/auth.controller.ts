@@ -2,13 +2,14 @@ import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { CreateUser, findUserByEmail } from "../services/auth.service";
 import { IUser } from "../models/user.model";
+import { SendRegisterationMail } from "../services/email.service";
 
 /**
  *
  * @param req
  * @param res
  * - User Registration
- * - api/v1/auth/register
+ * - POST api/v1/auth/register
  */
 export async function userRegisterController(req: Request, res: Response) {
   const { name, email, password } = req.body;
@@ -27,6 +28,7 @@ export async function userRegisterController(req: Request, res: Response) {
   const token = jwt.sign(payload, process.env.JWT_SECRET as string, {
     expiresIn: "1h",
   });
+  await SendRegisterationMail({ name: user.name, email: user?.email });
   res.cookie("token", token);
   res.status(201).json({
     token,
@@ -39,7 +41,7 @@ export async function userRegisterController(req: Request, res: Response) {
  * @param req
  * @param res
  * - User Login
- * - api/v1/auth/login
+ * - POST api/v1/auth/login
  */
 export async function userLoginController(req: Request, res: Response) {
   try {
@@ -50,23 +52,28 @@ export async function userLoginController(req: Request, res: Response) {
 
     const user = await findUserByEmail(email);
     if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ message: "User not registered!" });
     }
     const isMatch = await user.comparePassword(password);
-    const token = jwt.sign(
-      { id: user._id, email: user.email },
-      process.env.JWT_SECRET as string,
-      { expiresIn: "1d" },
-    );
-    res.status(200).json({
-      success: true,
-      token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
-    });
+    if (isMatch) {
+      const token = jwt.sign(
+        { id: user._id, email: user.email },
+        process.env.JWT_SECRET as string,
+        { expiresIn: "1d" },
+      );
+      res.status(200).json({
+        success: true,
+        token,
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    }
+    return res
+      .status(401)
+      .json({ message: "User not credentials not matched!" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
