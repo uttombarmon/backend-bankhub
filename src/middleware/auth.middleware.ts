@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
+import { findAdminByEmail } from "../services/auth.service";
 
 declare global {
   namespace Express {
@@ -28,4 +29,13 @@ export async function authMiddleware(
       .status(401)
       .json({ message: "Unauthorized access, invalid token!" });
   }
+}
+
+export async function adminMiddleware(req:Request,res:Response,next:NextFunction){
+    const user = req.user
+    const admin = await findAdminByEmail(user.email)
+    if(!admin){
+        return res.status(403).json({message:"Forbidden access"})
+    }
+    return next()
 }

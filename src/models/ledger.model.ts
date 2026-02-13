@@ -29,7 +29,6 @@ const ledgerSchema = new Schema({
         immutable: true
     },
 }, { timestamps: true })
-ledgerSchema.index({ account: 1 });
 function preventLedgerModification() {
     throw new Error("Ledger cannot be modified");
 }

@@ -21,6 +21,22 @@ export async function findUserByEmail(email: string, password?: string) {
 }
 
 /**
+ *
+ * @param email
+ * @returns
+ * Find Admin By Email
+ */
+export async function findAdminByEmail(email:string) {
+  try {
+    const admin = await userModel.findOne({ email,admin:true}).select("+admin");
+    return admin;
+  } catch (error) {
+    console.error("Find admin by email error: ", error);
+    throw new Error("Admin Find By Email Error!");
+  }
+}
+
+/**
  * @param {email, name, password}
  * - User create
  */

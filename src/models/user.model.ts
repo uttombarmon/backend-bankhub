@@ -7,6 +7,7 @@ export interface IUser extends Document {
   name: string;
   email: string;
   password?: string;
+  admin:boolean;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(password: string): Promise<boolean>;
@@ -35,6 +36,11 @@ const userSchema = new Schema<IUser>(
       minLength: [8, "Password contain 8 or more characters!"],
       select: false,
     },
+    admin:{
+      type: Boolean,
+      default:false,
+      select:false
+    }
   },
   {
     timestamps: true,
