@@ -55,14 +55,21 @@ export async function userLoginController(req: Request, res: Response) {
       return res.status(401).json({ message: "User not registered!" });
     }
     const isMatch = await user.comparePassword(password);
-    console.log(isMatch);
-    if (isMatch) {
-      const token = jwt.sign(
-        { id: user._id, email: user.email },
-        process.env.JWT_SECRET as string,
-        { expiresIn: "1d" },
-      );
-      res.status(200).json({
+    // console.log(isMatch);
+    if (!isMatch) {
+      return res
+        .status(401)
+        .json({ message: "User not credentials not matched!" });
+    }
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET as string,
+      { expiresIn: "1d" },
+    );
+    res
+      .cookie("token", token)
+      .status(200)
+      .json({
         success: true,
         token,
         user: {
@@ -71,10 +78,6 @@ export async function userLoginController(req: Request, res: Response) {
           email: user.email,
         },
       });
-    }
-    return res
-      .status(401)
-      .json({ message: "User not credentials not matched!" });
   } catch (error) {
     res.status(500).json({ message: "Server error", error });
   }
