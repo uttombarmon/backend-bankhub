@@ -3,7 +3,7 @@ import { AccountModel } from "../models/account.model";
 import { Transaction } from "../models/transaction.model";
 import mongoose from "mongoose";
 import { Ledger } from "../models/ledger.model";
-import { SendTransactionReceivedAmountMail, SendTransactionSuccessMail } from "../services/email.service";
+import { SendTransactionReceivedAmountMail, SendTransactionSuccessMail } from "../services/transaction.service";
 
 export async function transferMoney(req:Request,res:Response) {
     const { fromAccount, toAccount, amount, idempotencyKey} =req.body
