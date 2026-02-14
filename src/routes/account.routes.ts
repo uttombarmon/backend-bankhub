@@ -13,4 +13,7 @@ accountRouter.get("/", authMiddleware, getAccount);
 // get balance
 accountRouter.get("/balance", authMiddleware, getBalance);
 
+// get all accounts
+// accountRouter.get("/all", authMiddleware, adminMiddleware, getAllAccounts);
+
 export default accountRouter;
