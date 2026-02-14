@@ -7,6 +7,7 @@ export enum UserStatus {
 }
 
 export interface IAccount extends Document {
+  accountNumber: string;
   user: Types.ObjectId;
   status: UserStatus;
   currency: string;
@@ -15,6 +16,13 @@ export interface IAccount extends Document {
 
 const accountSchema = new Schema<IAccount>(
   {
+    accountNumber: {
+      type: String,
+      unique: true,
+      required: true,
+      immutable: true,
+      index: true,
+    },
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
