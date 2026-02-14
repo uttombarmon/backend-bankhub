@@ -4,7 +4,7 @@ import { initiateTransfer, transferMoney } from "../controllers/transaction.cont
 
 const routerTransaction = Router();
 
-routerTransaction.post("/transfer", authMiddleware, transferMoney);
-routerTransaction.post("/admin/initiate-transfer",authMiddleware, adminMiddleware, initiateTransfer);
+routerTransaction.post("/create", authMiddleware, transferMoney);
+routerTransaction.post("/admin/initiate",authMiddleware, adminMiddleware, initiateTransfer);
 
 export default routerTransaction;

@@ -120,6 +120,7 @@ export async function transferMoney(req:Request,res:Response) {
         session.endSession();
         return res.status(201).json({message:"Transaction created successfully",transaction})
     } catch (error) {
+        console.log(error)
         await session.abortTransaction();
         return res.status(500).json({message:"Internal server error"})
     }

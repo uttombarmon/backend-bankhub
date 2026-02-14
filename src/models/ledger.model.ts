@@ -19,7 +19,10 @@ const ledgerSchema = new Schema({
     amount: {
         type: Number,
         required: [true,"Amount is required"],
-        min: [0.01,"Amount must be greater than 0"],
+validate: {
+      validator: (v: number) => v !== 0,
+      message: "Amount cannot be zero."
+  },
         immutable: true 
     },
     type: {
