@@ -18,20 +18,20 @@ export async function createAccount(req: Request, res: Response) {
 export async function getAccount(req: Request, res: Response) {
   try {
     const userId = req.user.id;
-    const account = await AccountModel.findOne({ user: userId });
+    const account = await AccountModel.find({ user: userId });
     return res.status(200).json({ account });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error!" });
   }
 }
 
-// get balance controller
+// get balance controller by account id
 export async function getBalance(req: Request, res: Response) {
   try {
-    const userId = req.user.id;
-    const account = await AccountModel.findOne({ user: userId });
+    const id = req.params.id;
+    const account = await AccountModel.findOne({ _id: id });
     const balance = await account?.getCurrentBalance();
-    return res.status(200).json({ balance });
+    return res.status(200).json({ account: account?.accountNumber, balance: balance });
   } catch (error) {
     return res.status(500).json({ message: "Internal Server Error!" });
   }

@@ -7,11 +7,11 @@ const accountRouter = Router();
 // create account
 accountRouter.post("/create", authMiddleware, createAccount);
 
-// get account
+// get accounts
 accountRouter.get("/", authMiddleware, getAccount);
 
 // get balance
-accountRouter.get("/balance", authMiddleware, getBalance);
+accountRouter.get("/balance/:id", authMiddleware, getBalance);
 
 // get all accounts
 // accountRouter.get("/all", authMiddleware, adminMiddleware, getAllAccounts);
