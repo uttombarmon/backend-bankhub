@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import { findAdminByEmail } from "../services/auth.service";
-
+import { TokenBlacklistModel } from "../models/tokenBlacklist.model";
 declare global {
   namespace Express {
     interface Request {
@@ -20,6 +20,10 @@ export async function authMiddleware(
     return res.status(401).json({ message: "Unauthorized access" });
   }
   try {
+    const tokenBlacklist = await TokenBlacklistModel.findOne({ token });
+    if (tokenBlacklist) {
+      return res.status(401).json({ message: "Unauthorized access" });
+    }
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
     req.user = decoded;
     return next();

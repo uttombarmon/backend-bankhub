@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authMiddleware } from "../middleware/auth.middleware";
-import { createAccount, getAccount, getBalance } from "../controllers/account.controller";
+import { createAccount, getAccount, getBalance} from "../controllers/account.controller";
 
 const accountRouter = Router();
 
@@ -12,6 +12,7 @@ accountRouter.get("/", authMiddleware, getAccount);
 
 // get balance
 accountRouter.get("/balance/:id", authMiddleware, getBalance);
+
 
 // get all accounts
 // accountRouter.get("/all", authMiddleware, adminMiddleware, getAllAccounts);

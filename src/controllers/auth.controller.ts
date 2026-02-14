@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { CreateUser, findUserByEmail } from "../services/auth.service";
 import { IUser } from "../models/user.model";
 import { SendRegisterationMail } from "../services/email.service";
+import { TokenBlacklistModel } from "../models/tokenBlacklist.model";
 
 /**
  *
@@ -82,3 +83,18 @@ export async function userLoginController(req: Request, res: Response) {
     res.status(500).json({ message: "Server error", error });
   }
 }
+
+// logout controller
+export async function logout(req: Request, res: Response) {
+  try {
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    await TokenBlacklistModel.create({ token });
+    return res.clearCookie("token").status(200).json({ message: "Logout successful" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal Server Error!" });
+  }
+}
+
