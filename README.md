@@ -8,6 +8,7 @@ A robust backend service for a banking application, built with Node.js, Express,
 - **Account Management**: Create accounts, view balances, and manage user details.
 - **Transactions**: Secure money transfers between accounts with transaction history.
 - **Security**: Implements Helmet for headers, CORS configuration, and input validation.
+- **Logout**: Secure logout functionality with token blacklisting.
 - **Email Notifications**: Integration with Nodemailer for sending transactional emails (e.g., welcome emails).
 
 ## 🛠️ Tech Stack
@@ -96,6 +97,7 @@ All API routes are prefixed with `/api/v1`.
 | :----- | :---------- | :--------------------- | :-------------------------- |
 | POST   | `/register` | Register a new user    | `name`, `email`, `password` |
 | POST   | `/login`    | Login an existing user | `email`, `password`         |
+| POST   | `/logout`   | Logout user            | -                           |
 
 ### Accounts (`/account`)
 
